@@ -485,3 +485,48 @@ def zmf(x, a, b):
     y[idx] = 0
 
     return y
+def pimf_r(x, a, b, c, d):
+    """
+    Pi-function fuzzy membership generator.
+
+    Parameters
+    ----------
+    x : 1d array
+        Independent variable.
+    a : float
+        Left 'foot', where the function begins to climb from zero.
+    b : float
+        Left 'ceiling', where the function levels off at 1.
+    c : float
+        Right 'ceiling', where the function begins falling from 1.
+    d : float
+        Right 'foot', where the function reattains zero.
+
+    Returns
+    -------
+    y : 1d array
+        Pi-function.
+
+    Notes
+    -----
+    This is equivalently a product of smf and zmf.
+    """
+    y = np.ones(len(x))
+    assert a <= b and b <= c and c <= d, 'a <= b <= c <= d is required.'
+
+    idx = x <= a
+    y[idx] = 1
+
+    idx = np.logical_and(a <= x, x <= b)
+    y[idx] = 1- ((x[idx] - a) / (b - a)) 
+
+    idx = np.logical_and(b < x, x <= c)
+    y[idx] = 0
+
+    idx = np.logical_and(c <= x, x < =d)
+    y[idx] =  +((x[idx] - c) / (d - c)) 
+
+    idx = x >= d
+    y[idx] = 1
+
+    return y
